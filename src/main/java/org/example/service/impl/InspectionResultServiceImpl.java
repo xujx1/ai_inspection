@@ -22,9 +22,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class InspectionServiceImpl implements InspectionResultService {
+public class InspectionResultServiceImpl implements InspectionResultService {
 
-    private static final Logger log = LoggerFactory.getLogger(InspectionServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(InspectionResultServiceImpl.class);
 
     @Autowired
     private InspectionResultMapper inspectionResultMapper;

@@ -61,3 +61,15 @@ logging:
     org.example.mapper: debug
     org.springframework.jdbc: debug
     org.mybatis: debug
+
+# 巡检服务配置
+app:
+  env:
+    type: dev
+
+# DashScope API配置
+dashscope:
+  api:
+    model: xxx
+    api_key: xxx
+    base_url: xxx

@@ -4,81 +4,49 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11d498a3-190b-41c3-96f8-7777ec1d70ab" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/smartfox/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/APP-META/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/APP-META/docker-config/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app.log" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/inspection_page/index1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Application.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/HealthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/IndexController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/InspectionPromptController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/InspectionResultController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/controller/InspectionTagController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/InspectionDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/InspectionPromptDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/InspectionResultDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/InspectionTagDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/InspectionPrompt.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/InspectionResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/InspectionTag.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/job/PageScreenshotProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/mapper/InspectionPromptMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/mapper/InspectionResultMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/mapper/InspectionTagMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/query/InspectionPromptQuery.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/query/InspectionQuery.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/query/InspectionResultQuery.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/query/InspectionTagQuery.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/result/BaseResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/result/PojoResult.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/InspectionPromptService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/InspectionResultService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/InspectionTagService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/impl/InspectionPromptServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/impl/InspectionServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/impl/InspectionTagServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/inspection/index.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/inspection_prompt.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/inspection_result.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/inspection_tag.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mapper/InspectionPromptMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mapper/InspectionResultMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mapper/InspectionTagMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/css/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/inspection.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/inspection_page/dashboard_dynamic.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/inspection_page/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/prompt.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/static/tag.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/inspection_result.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/mapper/InspectionResultMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/Application.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/controller/HealthController.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionResultDTO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/entity/InspectionResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/mapper/InspectionResultMapper.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/query/InspectionQuery.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/result/BaseResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/result/PojoResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/org/example/service/impl/InspectionServiceImpl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/static/css/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/static/inspection.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/classes/static/prompt.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
+    <list default="true" id="11d498a3-190b-41c3-96f8-7777ec1d70ab" name="更改" comment="init">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/config/DashScopeConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/config/EnvTypeConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/InspectionIndicatorDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/dto/NumberComparisonResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/entity/EpmInspectionResultDO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/enums/CheckFlagEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/enums/InspectionTypeEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/enums/YNTypeEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/job/InspectionCheckProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/query/EpmInspectionResultParam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/result/ProcessResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/PicCompareService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/service/impl/PicCompareServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/tools/ComparisonTool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/tools/ComparisonToolManager.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/tools/FluctuationAnalysisTool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/tools/JsonComparisonTool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/tools/NumberComparisonTool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/tools/StringComparisonTool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/tools/ThresholdComparisonTool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/tools/ToolExecutor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/utils/JsonUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/job/PageScreenshotProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/job/PageScreenshotProcessor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/result/BaseResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/result/BaseResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/result/PojoResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/result/PojoResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/service/impl/InspectionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/service/impl/InspectionResultServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/Application.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/controller/HealthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/controller/HealthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionResultDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionResultDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/entity/InspectionResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/entity/InspectionResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/mapper/InspectionResultMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/mapper/InspectionResultMapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/query/InspectionQuery.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/query/InspectionQuery.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/result/BaseResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/result/BaseResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/result/PojoResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/result/PojoResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/service/impl/InspectionServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,11 +115,11 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="org.example.job" />
-      <recent name="org.example.service.impl" />
-      <recent name="org.example.query" />
-      <recent name="org.example.service" />
+      <recent name="org.example.utils" />
       <recent name="org.example.dto" />
+      <recent name="org.example.service.impl" />
+      <recent name="org.example.service" />
+      <recent name="org.example.job" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.Application">
@@ -211,11 +179,24 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1754538061567</updated>
-      <workItem from="1754538062622" duration="26803000" />
+      <workItem from="1754538062622" duration="31379000" />
     </task>
+    <task id="LOCAL-00001" summary="init">
+      <option name="closed" value="true" />
+      <created>1754623577557</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1754623577557</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="init" />
+    <option name="LAST_COMMIT_MESSAGE" value="init" />
   </component>
 </project>

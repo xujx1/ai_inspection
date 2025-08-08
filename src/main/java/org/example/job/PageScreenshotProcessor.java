@@ -8,6 +8,9 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.example.entity.InspectionResult;
 import org.example.entity.InspectionTag;
+import org.example.enums.CheckFlagEnum;
+import org.example.enums.InspectionTypeEnum;
+import org.example.enums.YNTypeEnum;
 import org.example.mapper.InspectionResultMapper;
 import org.example.mapper.InspectionTagMapper;
 import org.slf4j.Logger;
@@ -47,7 +50,7 @@ public class PageScreenshotProcessor {
      * 定时任务执行方法
      * 每1分钟执行一次页面截图任务
      */
-    @Scheduled(fixedRate = 60000) // 5分钟 = 300000毫秒
+    @Scheduled(fixedRate = 60000)
     public void executeScreenshotTask() {
         log.info("开始执行页面截图定时任务");
 
@@ -238,7 +241,7 @@ public class PageScreenshotProcessor {
             LocalDateTime now = LocalDateTime.now();
 
             // 查询是否已有记录
-            List<InspectionResult> existingResults = inspectionResultMapper.selectByTagAndType(tag.getTag(), "page");
+            List<InspectionResult> existingResults = inspectionResultMapper.selectByTagAndType(tag.getTag(), InspectionTypeEnum.PAGE.getCode());
 
             if (CollectionUtils.isNotEmpty(existingResults)) {
                 // 更新现有记录
@@ -248,7 +251,7 @@ public class PageScreenshotProcessor {
                 existingResult.setLastResp(existingResult.getThisResp());
                 existingResult.setThisResp(base64Image);
                 existingResult.setGmtModified(now);
-                existingResult.setCheckFlag("U"); // 标记为未检查
+                existingResult.setCheckFlag(CheckFlagEnum.U.getCode()); // 标记为未检查
 
                 // 更新请求信息
                 if (StringUtils.isNotEmpty(existingResult.getReq())) {
@@ -271,9 +274,9 @@ public class PageScreenshotProcessor {
                 newResult.setThisResp(base64Image);
                 newResult.setGmtCreate(now);
                 newResult.setGmtModified(now);
-                newResult.setIsDeleted("n");
-                newResult.setCheckFlag("U"); // 标记为未检查
-                newResult.setInspectionType("page");
+                newResult.setIsDeleted(YNTypeEnum.N.getCode());
+                newResult.setCheckFlag(CheckFlagEnum.U.getCode()); // 标记为未检查
+                newResult.setInspectionType(InspectionTypeEnum.PAGE.getCode());
 
                 // 设置请求信息
 

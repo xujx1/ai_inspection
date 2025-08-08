@@ -1,12 +1,10 @@
 package org.example.result;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.util.Map;
 
 public abstract class BaseResult<D> implements Serializable {
 
-    @Serial
     private static final long serialVersionUID = 2360806571162643908L;
 
     public BaseResult() {
