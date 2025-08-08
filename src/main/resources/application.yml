@@ -70,7 +70,7 @@ app:
 # DashScope API配置
 dashscope:
   api:
-    model: xxx
+    model: qwen-vl-max
     key: xxx
     url: xxx
 

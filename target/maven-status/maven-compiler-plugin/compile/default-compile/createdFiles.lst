@@ -4,7 +4,6 @@ org/example/service/PicCompareService.class
 org/example/tools/JsonComparisonTool.class
 org/example/controller/IndexController.class
 org/example/entity/EpmInspectionResultDO.class
-org/example/config/DashScopeConfig.class
 org/example/service/InspectionResultService.class
 org/example/tools/JsonComparisonTool$1.class
 org/example/dto/InspectionPromptDTO.class

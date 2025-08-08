@@ -71,6 +71,6 @@ app:
 dashscope:
   api:
     model: qwen-vl-max
-    key: sk-5d5ecc3afea0473f8e9addd6d020f12b
-    url: https://dashscope.alibaba-inc.com/api/v1
+    key: xxx
+    url: xxx
 

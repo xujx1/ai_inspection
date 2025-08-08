@@ -4,7 +4,6 @@
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/entity/InspectionPrompt.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/result/ProcessResult.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/service/InspectionResultService.java
-/Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/config/DashScopeConfig.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/config/DashScopeApiConfig.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/result/BaseResult.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/job/InspectionCheckProcessor.java
