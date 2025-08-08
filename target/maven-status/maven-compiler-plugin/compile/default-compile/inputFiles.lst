@@ -5,6 +5,7 @@
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/result/ProcessResult.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/service/InspectionResultService.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/config/DashScopeConfig.java
+/Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/config/DashScopeApiConfig.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/result/BaseResult.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/job/InspectionCheckProcessor.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/dto/InspectionResultDTO.java
@@ -18,6 +19,7 @@
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/config/EnvTypeConfig.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/query/InspectionQuery.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/tools/StringComparisonTool.java
+/Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/utils/JsonCleanerUtils.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/service/impl/InspectionResultServiceImpl.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/service/impl/InspectionPromptServiceImpl.java
 /Users/xujinxin/IdeaProjects/ai_inspection/src/main/java/org/example/dto/InspectionIndicatorDTO.java

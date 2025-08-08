@@ -10,6 +10,7 @@ import com.alibaba.fastjson2.TypeReference;
 import com.google.gson.internal.LinkedTreeMap;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.example.utils.JsonCleanerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -153,7 +154,7 @@ public class ToolExecutor {
             log.info("执行工具调用: {} 参数: {}", functionName, arguments);
 
             // 处理参数中可能包含的额外文本
-            String cleanedArguments = extractJsonFromText(arguments);
+            String cleanedArguments = JsonCleanerUtils.cleanJsonArguments(arguments);
             return toolManager.executeToolCall(functionName, cleanedArguments);
 
         } catch (Exception e) {
@@ -162,26 +163,7 @@ public class ToolExecutor {
         }
     }
 
-    /**
-     * 从文本中提取 JSON 部分
-     */
-    private String extractJsonFromText(String text) {
-        if (StringUtils.isEmpty(text)) {
-            return text;
-        }
 
-        // 查找 JSON 对象的开始和结束位置
-        int startBrace = text.indexOf('{');
-        int endBrace = text.lastIndexOf('}');
-
-        // 如果找到了完整的 JSON 对象
-        if (startBrace != -1 && endBrace != -1 && endBrace > startBrace) {
-            return text.substring(startBrace, endBrace + 1);
-        }
-
-        // 如果没有找到 JSON 对象，返回原文本
-        return text;
-    }
 
     /**
      * 继续对话，传入工具调用结果

@@ -71,5 +71,6 @@ app:
 dashscope:
   api:
     model: xxx
-    api_key: xxx
-    base_url: xxx
+    key: xxx
+    url: xxx
+

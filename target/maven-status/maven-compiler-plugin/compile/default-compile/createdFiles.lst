@@ -1,3 +1,5 @@
+org/example/service/impl/PicCompareServiceImpl.class
+org/example/config/DashScopeApiConfig.class
 org/example/service/PicCompareService.class
 org/example/tools/JsonComparisonTool.class
 org/example/controller/IndexController.class
@@ -19,11 +21,13 @@ org/example/dto/InspectionResultDTO.class
 org/example/tools/ComparisonTool.class
 org/example/mapper/InspectionTagMapper.class
 org/example/service/impl/InspectionPromptServiceImpl.class
+org/example/utils/JsonCleanerUtils$1.class
 org/example/enums/CheckFlagEnum.class
 org/example/entity/InspectionResult.class
 org/example/service/impl/PicCompareServiceImpl$2.class
 org/example/tools/ToolExecutor.class
 org/example/result/BaseResult.class
+org/example/utils/JsonCleanerUtils.class
 org/example/dto/InspectionDTO.class
 org/example/result/PojoResult.class
 org/example/tools/StringComparisonTool$1.class
@@ -31,6 +35,7 @@ org/example/tools/FluctuationAnalysisTool$1.class
 org/example/entity/InspectionPrompt.class
 org/example/service/impl/InspectionResultServiceImpl$1.class
 org/example/query/InspectionPromptQuery.class
+org/example/dto/InspectionIndicatorDTO.class
 org/example/tools/NumberComparisonTool$1.class
 org/example/dto/InspectionTagDTO.class
 org/example/entity/InspectionTag.class
@@ -45,6 +50,7 @@ org/example/query/InspectionResultQuery.class
 org/example/enums/InspectionTypeEnum.class
 org/example/service/impl/InspectionTagServiceImpl.class
 org/example/tools/ThresholdComparisonTool.class
+org/example/utils/JsonCleanerUtils$2.class
 org/example/query/InspectionQuery.class
 org/example/job/InspectionCheckProcessor.class
 org/example/tools/StringComparisonTool.class

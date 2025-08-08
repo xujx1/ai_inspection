@@ -4,15 +4,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * DashScope API配置类
+ * DashScope API配置类 - 匹配配置文件中的snake_case属性名
  */
 @Configuration
 @ConfigurationProperties(prefix = "dashscope.api")
-public class DashScopeConfig {
+public class DashScopeApiConfig {
 
     private String model;
-    private String apiKey;
-    private String baseUrl;
+    private String key;
 
     public String getModel() {
         return model;
@@ -22,19 +21,23 @@ public class DashScopeConfig {
         this.model = model;
     }
 
-    public String getApiKey() {
-        return apiKey;
+    public String getKey() {
+        return key;
     }
 
-    public void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
+    public String getUrl() {
+        return url;
     }
 
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
+    public void setUrl(String url) {
+        this.url = url;
     }
+
+    private String url;
+
+
 }

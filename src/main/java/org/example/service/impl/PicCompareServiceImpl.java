@@ -6,7 +6,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.example.config.DashScopeConfig;
+import org.example.config.DashScopeApiConfig;
 import org.example.dto.InspectionIndicatorDTO;
 import org.example.entity.InspectionPrompt;
 import org.example.entity.InspectionResult;
@@ -34,7 +34,7 @@ public class PicCompareServiceImpl implements PicCompareService {
     private static final Logger log = LoggerFactory.getLogger(PicCompareServiceImpl.class);
 
     @Autowired
-    private DashScopeConfig dashScopeConfig;
+    private DashScopeApiConfig dashScopeConfig;
 
     @Autowired
     private InspectionResultMapper inspectionResultMapper;
@@ -57,7 +57,7 @@ public class PicCompareServiceImpl implements PicCompareService {
             });
 
             // 多模态模型接口
-            MultiModalConversation conv = new MultiModalConversation(Protocol.HTTP.getValue(), dashScopeConfig.getBaseUrl());
+            MultiModalConversation conv = new MultiModalConversation(Protocol.HTTP.getValue(), dashScopeConfig.getUrl());
 
             String originalPrompt = null;
 
@@ -94,7 +94,7 @@ public class PicCompareServiceImpl implements PicCompareService {
             List<MultiModalMessage> list = Arrays.asList(systemMessage, toolsDescription, analysisGuide, userMessage);
 
             MultiModalConversationParam param = MultiModalConversationParam.builder()
-                    .apiKey(dashScopeConfig.getApiKey())
+                    .apiKey(dashScopeConfig.getKey())
                     .model(dashScopeConfig.getModel())
                     .messages(list)
                     .tools(toolExecutor.getToolManager().getAllTools())
@@ -103,7 +103,7 @@ public class PicCompareServiceImpl implements PicCompareService {
             MultiModalConversationResult conversationResult = conv.call(param);
 
             // 处理工具调用
-            String finalText = toolExecutor.handleModelResponse(conv, conversationResult, dashScopeConfig.getApiKey(), list, dashScopeConfig.getModel());
+            String finalText = toolExecutor.handleModelResponse(conv, conversationResult, dashScopeConfig.getKey(), list, dashScopeConfig.getModel());
             log.info("AI比较结果: " + finalText);
 
             List<InspectionIndicatorDTO> resultDTOS = convertTextToResultDTOs(finalText);

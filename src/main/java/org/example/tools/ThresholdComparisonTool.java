@@ -6,6 +6,8 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.TypeReference;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.apache.commons.lang3.StringUtils;
+import org.example.utils.JsonCleanerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +62,14 @@ public class ThresholdComparisonTool implements ComparisonTool {
     @Override
     public String execute(String arguments) {
         try {
-            Map<String, Object> params = JSON.parseObject(arguments, new TypeReference<Map<String, Object>>() {});
+            log.info("阈值比较工具收到参数: {}", arguments);
+            
+            // 清理参数中的非JSON内容
+            String cleanedArguments = JsonCleanerUtils.cleanJsonArguments(arguments);
+            log.info("清理后的参数: {}", cleanedArguments);
+            
+            Map<String, Object> params = JSON.parseObject(cleanedArguments, new TypeReference<>() {
+            });
             Number actualValue = (Number) params.get("actualValue");
             Number expectedValue = (Number) params.get("expectedValue");
             Number threshold = (Number) params.get("threshold");
@@ -71,10 +80,12 @@ public class ThresholdComparisonTool implements ComparisonTool {
 
             return compareThreshold(actualValue.doubleValue(), expectedValue.doubleValue(), threshold.doubleValue());
         } catch (Exception e) {
-            log.error("阈值比较工具执行失败: {}", e.getMessage(), e);
-            return "阈值比较工具执行失败: " + e.getMessage();
+            log.error("阈值比较工具执行失败，原始参数: {}, 错误: {}", arguments, e.getMessage(), e);
+            return "阈值比较工具执行失败: " + e.getMessage() + "，原始参数: " + arguments;
         }
     }
+
+
 
     /**
      * 精确的阈值比较，避免逻辑判断错误
