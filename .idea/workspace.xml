@@ -4,23 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="11d498a3-190b-41c3-96f8-7777ec1d70ab" name="更改" comment="init">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inspection_page/index1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/JsonCleanerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/Application.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/controller/HealthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/controller/HealthController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionResultDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/dto/InspectionResultDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/entity/InspectionResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/entity/InspectionResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/mapper/InspectionResultMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/mapper/InspectionResultMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/query/InspectionQuery.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/query/InspectionQuery.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/result/BaseResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/result/BaseResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/org/example/result/PojoResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/result/PojoResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-    </list>
+    <list default="true" id="11d498a3-190b-41c3-96f8-7777ec1d70ab" name="更改" comment="init" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -155,7 +139,7 @@
       <option name="presentableId" value="Default" />
       <updated>1754538061567</updated>
       <workItem from="1754538062622" duration="32541000" />
-      <workItem from="1754638328771" duration="2514000" />
+      <workItem from="1754638328771" duration="2960000" />
     </task>
     <task id="LOCAL-00001" summary="init">
       <option name="closed" value="true" />
@@ -181,7 +165,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754638382425</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="init">
+      <option name="closed" value="true" />
+      <created>1754640930004</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1754640930004</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
