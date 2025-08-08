@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.InspectionResultMapper">
+
+    <!-- 结果集映射 -->
+    <resultMap id="BaseResultMap" type="org.example.entity.InspectionResult">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="VARCHAR"/>
+
+        <result column="tag" property="tag" jdbcType="VARCHAR"/>
+        <result column="work_no" property="workNo" jdbcType="VARCHAR"/>
+        <result column="method_name" property="methodName" jdbcType="VARCHAR"/>
+        <result column="req" property="req" jdbcType="CLOB"/>
+        <result column="last_resp" property="lastResp" jdbcType="CLOB"/>
+        <result column="this_resp" property="thisResp" jdbcType="CLOB"/>
+        <result column="check_flag" property="checkFlag" jdbcType="VARCHAR"/>
+        <result column="error_msg" property="errorMsg" jdbcType="CLOB"/>
+        <result column="inspection_type" property="inspectionType" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, gmt_create, gmt_modified, is_deleted, tag, work_no, 
+        method_name, req, last_resp, this_resp, check_flag, error_msg, inspection_type
+    </sql>
+
+    <!-- 条件查询片段 -->
+    <sql id="whereCondition">
+        <where>
+            
+            <if test="workNo != null and workNo != ''">
+                AND work_no = #{workNo}
+            </if>
+            <if test="methodName != null and methodName != ''">
+                AND method_name = #{methodName}
+            </if>
+            <if test="checkFlag != null and checkFlag != ''">
+                AND check_flag = #{checkFlag}
+            </if>
+            <if test="inspectionType != null and inspectionType != ''">
+                AND inspection_type = #{inspectionType}
+            </if>
+            <if test="tag != null and tag != ''">
+                AND tag = #{tag}
+            </if>
+            AND is_deleted = 'n'
+        </where>
+    </sql>
+
+    <!-- 新增记录 -->
+    <insert id="insert" parameterType="org.example.entity.InspectionResult" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO inspection_result (
+            gmt_create, gmt_modified, is_deleted, tag, work_no,
+            method_name, req, last_resp, this_resp, check_flag, error_msg, inspection_type
+        ) VALUES (
+            #{gmtCreate}, #{gmtModified}, #{isDeleted}, #{tag}, #{workNo},
+            #{methodName}, #{req}, #{lastResp}, #{thisResp}, #{checkFlag}, #{errorMsg}, #{inspectionType}
+        )
+    </insert>
+
+        <!-- 批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO inspection_result (
+            gmt_create, gmt_modified, is_deleted, tag, work_no,
+            method_name, req, last_resp, this_resp, check_flag, error_msg, inspection_type
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.gmtCreate}, #{item.gmtModified}, #{item.isDeleted}, #{item.tag}, #{item.workNo},
+            #{item.methodName}, #{item.req}, #{item.lastResp}, #{item.thisResp}, #{item.checkFlag}, #{item.errorMsg}, #{item.inspectionType}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_result
+        WHERE id = #{id} AND is_deleted = 'n'
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_result
+        <include refid="whereCondition"/>
+        ORDER BY gmt_create DESC
+    </select>
+
+    <!-- 查询所有记录 -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_result
+        WHERE is_deleted = 'n'
+        ORDER BY gmt_create DESC
+    </select>
+
+    <!-- 根据工号和方法名查询最新记录 -->
+    <select id="selectLatestByWorkNoAndMethod" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_result
+        WHERE work_no = #{workNo} 
+          AND method_name = #{methodName}
+          AND is_deleted = 'n'
+        ORDER BY gmt_create DESC
+        LIMIT 1
+    </select>
+
+    <!-- 根据ID更新 -->
+    <update id="updateById" parameterType="org.example.entity.InspectionResult">
+        UPDATE inspection_result
+        <set>
+            gmt_modified = #{gmtModified},
+            <if test="tag != null">tag = #{tag},</if>
+            <if test="workNo != null">work_no = #{workNo},</if>
+            <if test="methodName != null">method_name = #{methodName},</if>
+            <if test="req != null">req = #{req},</if>
+            <if test="lastResp != null">last_resp = #{lastResp},</if>
+            <if test="thisResp != null">this_resp = #{thisResp},</if>
+            <if test="checkFlag != null">check_flag = #{checkFlag},</if>
+            <if test="errorMsg != null">error_msg = #{errorMsg},</if>
+            <if test="inspectionType != null">inspection_type = #{inspectionType},</if>
+        </set>
+        WHERE id = #{id} AND is_deleted = 'n'
+    </update>
+
+    <!-- 根据ID物理删除 -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM inspection_result WHERE id = #{id}
+    </delete>
+
+    <!-- 根据ID逻辑删除 -->
+    <update id="logicalDeleteById" parameterType="java.lang.Integer">
+        UPDATE inspection_result
+        SET is_deleted = 'y', gmt_modified = NOW()
+        WHERE id = #{id} AND is_deleted = 'n'
+    </update>
+
+    <!-- 根据条件统计记录数 -->
+    <select id="countByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM inspection_result
+        <include refid="whereCondition"/>
+    </select>
+
+    <!-- 根据tag和类型查询记录 -->
+    <select id="selectByTagAndType" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_result
+        WHERE tag = #{tag}
+          AND inspection_type = #{inspectionType}
+          AND is_deleted = 'n'
+        ORDER BY gmt_create DESC
+    </select>
+
+    <!-- 根据主键选择性更新 -->
+    <update id="updateByPrimaryKeySelective" parameterType="org.example.entity.InspectionResult">
+        UPDATE inspection_result
+        <set>
+            gmt_modified = #{gmtModified},
+            <if test="tag != null">tag = #{tag},</if>
+            <if test="workNo != null">work_no = #{workNo},</if>
+            <if test="methodName != null">method_name = #{methodName},</if>
+            <if test="req != null">req = #{req},</if>
+            <if test="lastResp != null">last_resp = #{lastResp},</if>
+            <if test="thisResp != null">this_resp = #{thisResp},</if>
+            <if test="checkFlag != null">check_flag = #{checkFlag},</if>
+            <if test="errorMsg != null">error_msg = #{errorMsg},</if>
+            <if test="inspectionType != null">inspection_type = #{inspectionType},</if>
+        </set>
+        WHERE id = #{id} AND is_deleted = 'n'
+    </update>
+
+</mapper>

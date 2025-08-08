@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.InspectionTagMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="org.example.entity.InspectionTag">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="tag" property="tag" jdbcType="VARCHAR"/>
+        <result column="tag_name" property="tagName" jdbcType="VARCHAR"/>
+        <result column="tag_desc" property="tagDesc" jdbcType="VARCHAR"/>
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="login_url" property="loginUrl" jdbcType="VARCHAR"/>
+        <result column="inspection_url" property="inspectionUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, gmt_create, gmt_modified, is_deleted, tag, tag_name, 
+        tag_desc, account, password, login_url, inspection_url
+    </sql>
+
+    <!-- 条件查询片段 -->
+    <sql id="whereCondition">
+        <where>
+            AND is_deleted = 'n'
+            <if test="tag != null and tag != ''">
+                AND tag = #{tag}
+            </if>
+            <if test="tagName != null and tagName != ''">
+                AND tag_name LIKE CONCAT('%', #{tagName}, '%')
+            </if>
+            <if test="tagDesc != null and tagDesc != ''">
+                AND tag_desc LIKE CONCAT('%', #{tagDesc}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <!-- 新增记录 -->
+    <insert id="insert" parameterType="org.example.entity.InspectionTag" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO inspection_tag (
+            gmt_create, gmt_modified, is_deleted, tag, tag_name,
+            tag_desc, account, password, login_url, inspection_url
+        ) VALUES (
+            #{gmtCreate}, #{gmtModified}, #{isDeleted}, #{tag}, #{tagName},
+            #{tagDesc}, #{account}, #{password}, #{loginUrl}, #{inspectionUrl}
+        )
+    </insert>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO inspection_tag (
+            gmt_create, gmt_modified, is_deleted, tag, tag_name,
+            tag_desc, account, password, login_url, inspection_url
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.gmtCreate}, #{item.gmtModified}, #{item.isDeleted}, #{item.tag}, #{item.tagName},
+            #{item.tagDesc}, #{item.account}, #{item.password}, #{item.loginUrl}, #{item.inspectionUrl}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_tag
+        WHERE id = #{id} AND is_deleted = 'n'
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_tag
+        <include refid="whereCondition"/>
+        ORDER BY gmt_create DESC
+    </select>
+
+    <!-- 根据条件统计记录数 -->
+    <select id="countByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM inspection_tag
+        <include refid="whereCondition"/>
+    </select>
+
+    <!-- 查询所有有效的标签（用于下拉框） -->
+    <select id="selectAllValid" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_tag
+        WHERE is_deleted = 'n'
+        ORDER BY gmt_create DESC
+    </select>
+
+    <!-- 更新记录 -->
+    <update id="updateById" parameterType="org.example.entity.InspectionTag">
+        UPDATE inspection_tag
+        <set>
+            gmt_modified = #{gmtModified},
+            <if test="tag != null">tag = #{tag},</if>
+            <if test="tagName != null">tag_name = #{tagName},</if>
+            <if test="tagDesc != null">tag_desc = #{tagDesc},</if>
+            <if test="account != null">account = #{account},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="loginUrl != null">login_url = #{loginUrl},</if>
+            <if test="inspectionUrl != null">inspection_url = #{inspectionUrl},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除（物理删除） -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM inspection_tag WHERE id = #{id}
+    </delete>
+
+    <!-- 根据ID逻辑删除 -->
+    <update id="logicalDeleteById" parameterType="java.lang.Integer">
+        UPDATE inspection_tag 
+        SET is_deleted = 'y', gmt_modified = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <!-- 查询所有标签（包括已删除的） -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_tag
+        WHERE is_deleted = 'n'
+        ORDER BY gmt_create DESC
+    </select>
+
+</mapper>

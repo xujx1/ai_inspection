@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.mapper.InspectionPromptMapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="org.example.entity.InspectionPrompt">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="tag" property="tag" jdbcType="VARCHAR"/>
+        <result column="prompt_name" property="promptName" jdbcType="VARCHAR"/>
+        <result column="method_name" property="methodName" jdbcType="VARCHAR"/>
+        <result column="prompt_content" property="promptContent" jdbcType="CLOB"/>
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, gmt_create, gmt_modified, is_deleted, tag, prompt_name, 
+        method_name, prompt_content
+    </sql>
+
+    <!-- 条件查询片段 -->
+    <sql id="whereCondition">
+        <where>
+            AND is_deleted = 'n'
+            <if test="tag != null and tag != ''">
+                AND tag = #{tag}
+            </if>
+            <if test="promptName != null and promptName != ''">
+                AND prompt_name LIKE CONCAT('%', #{promptName}, '%')
+            </if>
+            <if test="methodName != null and methodName != ''">
+                AND method_name = #{methodName}
+            </if>
+        </where>
+    </sql>
+
+    <!-- 新增记录 -->
+    <insert id="insert" parameterType="org.example.entity.InspectionPrompt" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO inspection_prompt (
+            gmt_create, gmt_modified, is_deleted, tag, prompt_name,
+            method_name, prompt_content
+        ) VALUES (
+            #{gmtCreate}, #{gmtModified}, #{isDeleted}, #{tag}, #{promptName},
+            #{methodName}, #{promptContent}
+        )
+    </insert>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" parameterType="java.util.List">
+        INSERT INTO inspection_prompt (
+            gmt_create, gmt_modified, is_deleted, tag, prompt_name,
+            method_name, prompt_content
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.gmtCreate}, #{item.gmtModified}, #{item.isDeleted}, #{item.tag}, #{item.promptName},
+            #{item.methodName}, #{item.promptContent}
+        )
+        </foreach>
+    </insert>
+
+    <!-- 根据ID查询 -->
+    <select id="selectById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_prompt
+        WHERE id = #{id} AND is_deleted = 'n'
+    </select>
+
+    <!-- 根据条件查询列表 -->
+    <select id="selectByCondition" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM inspection_prompt
+        <include refid="whereCondition"/>
+        ORDER BY gmt_create DESC
+    </select>
+
+    <!-- 根据条件统计记录数 -->
+    <select id="countByCondition" resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM inspection_prompt
+        <include refid="whereCondition"/>
+    </select>
+
+    <!-- 更新记录 -->
+    <update id="updateById" parameterType="org.example.entity.InspectionPrompt">
+        UPDATE inspection_prompt
+        <set>
+            gmt_modified = #{gmtModified},
+            <if test="tag != null">tag = #{tag},</if>
+            <if test="promptName != null">prompt_name = #{promptName},</if>
+            <if test="methodName != null">method_name = #{methodName},</if>
+            <if test="promptContent != null">prompt_content = #{promptContent},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <!-- 根据ID删除（物理删除） -->
+    <delete id="deleteById" parameterType="java.lang.Integer">
+        DELETE FROM inspection_prompt WHERE id = #{id}
+    </delete>
+
+    <!-- 根据ID逻辑删除 -->
+    <update id="logicalDeleteById" parameterType="java.lang.Integer">
+        UPDATE inspection_prompt 
+        SET is_deleted = 'y', gmt_modified = NOW()
+        WHERE id = #{id}
+    </update>
+
+</mapper>

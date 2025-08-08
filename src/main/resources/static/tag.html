@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 巡检标签管理</title>
+    <link rel="stylesheet" href="css/index.css">
+    <!-- Ant Design CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/antd@4.24.15/dist/antd.min.css">
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel Standalone for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Ant Design JavaScript -->
+    <script src="https://unpkg.com/antd@4.24.15/dist/antd.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { Table, Button, Input, Form, Modal, message, Spin, Tag, Select, Popconfirm, Tabs } = antd;
+        const { TabPane } = Tabs;
+
+        // API 调用函数
+        const tagApi = {
+            queryTagList: async (queryParams = {}) => {
+                try {
+                    console.log('调用API /api/tag/query，参数:', queryParams);
+                    
+                    const response = await fetch('/api/tag/query', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(queryParams)
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: API服务器未响应`);
+                    }
+                    
+                    const result = await response.json();
+                    console.log('API响应:', result);
+                    
+                    if (result.success) {
+                        return result.content || [];
+                    } else {
+                        console.error('查询失败:', result.errorMsg);
+                        throw new Error(result.errorMsg || '查询失败');
+                    }
+                } catch (error) {
+                    console.error('API调用错误:', error);
+                    console.warn('API不可用，返回空数据。请启动Spring Boot应用以获取真实数据。');
+                    return [];
+                }
+            },
+            
+            addTag: async (data) => {
+                try {
+                    const response = await fetch('/api/tag/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    return result;
+                } catch (error) {
+                    console.error('新增API调用错误:', error);
+                    throw error;
+                }
+            },
+            
+            updateTag: async (data) => {
+                try {
+                    const response = await fetch('/api/tag/update', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    return result;
+                } catch (error) {
+                    console.error('更新API调用错误:', error);
+                    throw error;
+                }
+            },
+            
+            deleteTag: async (id) => {
+                try {
+                    const response = await fetch(`/api/tag/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const result = await response.json();
+                    return result;
+                } catch (error) {
+                    console.error('删除API调用错误:', error);
+                    throw error;
+                }
+            }
+        };
+
+        const TagManagement = () => {
+            const [tableDataList, setTableDataList] = useState([]);
+            const [tableLoading, setTableLoading] = useState(false);
+            const [modalVisible, setModalVisible] = useState(false);
+            const [editMode, setEditMode] = useState(false);
+            const [formData, setFormData] = useState({});
+            const [modalLoading, setModalLoading] = useState(false);
+            const [currentView, setCurrentView] = useState('tag'); // 'tag', 'management'
+            const [selectedTag, setSelectedTag] = useState(null);
+            const [queryParams, setQueryParams] = useState({
+                tag: '',
+                tagName: '',
+                tagDesc: ''
+            });
+
+            useEffect(() => {
+                queryTableList();
+            }, []);
+
+            const queryTableList = async () => {
+                setTableLoading(true);
+                try {
+                    const results = await tagApi.queryTagList(queryParams);
+                    setTableDataList(results || []);
+                    setTableLoading(false);
+                } catch (error) {
+                    console.error('查询失败:', error);
+                    message.error(`查询失败: ${error.message}`);
+                    setTableLoading(false);
+                }
+            };
+
+            // 新增功能
+            const handleAdd = () => {
+                setEditMode(false);
+                setFormData({
+                    tag: '',
+                    tagName: '',
+                    tagDesc: '',
+                    account: '',
+                    password: '',
+                    loginUrl: '',
+                    inspectionUrl: ''
+                });
+                setModalVisible(true);
+            };
+
+            // 编辑功能
+            const handleEdit = (record) => {
+                setEditMode(true);
+                setFormData({
+                    id: record.id,
+                    tag: record.tag,
+                    tagName: record.tagName,
+                    tagDesc: record.tagDesc,
+                    account: record.account,
+                    password: record.password,
+                    loginUrl: record.loginUrl,
+                    inspectionUrl: record.inspectionUrl
+                });
+                setModalVisible(true);
+            };
+
+            // 删除功能
+            const handleDelete = async (record) => {
+                try {
+                    const result = await tagApi.deleteTag(record.id);
+                    if (result.success) {
+                        message.success('删除成功');
+                        queryTableList();
+                    } else {
+                        message.error(result.errorMsg || '删除失败');
+                    }
+                } catch (error) {
+                    console.error('删除失败:', error);
+                    message.error(`删除失败: ${error.message}`);
+                }
+            };
+
+            // 管理功能
+            const handleManage = (record) => {
+                setSelectedTag(record);
+                setCurrentView('management');
+            };
+
+            // 保存功能
+            const handleSave = async () => {
+                setModalLoading(true);
+                try {
+                    let result;
+                    if (editMode) {
+                        result = await tagApi.updateTag(formData);
+                    } else {
+                        result = await tagApi.addTag(formData);
+                    }
+                    
+                    if (result.success) {
+                        message.success(editMode ? '更新成功' : '新增成功');
+                        setModalVisible(false);
+                        queryTableList();
+                    } else {
+                        message.error(result.errorMsg || (editMode ? '更新失败' : '新增失败'));
+                    }
+                } catch (error) {
+                    console.error('保存失败:', error);
+                    message.error(`保存失败: ${error.message}`);
+                } finally {
+                    setModalLoading(false);
+                }
+            };
+
+            // 取消功能
+            const handleCancel = () => {
+                setModalVisible(false);
+                setFormData({});
+            };
+
+            // 返回标签列表
+            const handleBackToList = () => {
+                setCurrentView('tag');
+                setSelectedTag(null);
+            };
+
+            const columns = [
+                {
+                    title: 'ID',
+                    dataIndex: 'id',
+                    key: 'id',
+                    width: 80,
+                },
+                {
+                    title: '业务类型',
+                    dataIndex: 'tag',
+                    key: 'tag',
+                    width: 120,
+                },
+                {
+                    title: '标签名称',
+                    dataIndex: 'tagName',
+                    key: 'tagName',
+                    width: 150,
+                },
+                {
+                    title: '标签描述',
+                    dataIndex: 'tagDesc',
+                    key: 'tagDesc',
+                    width: 200,
+                },
+                {
+                    title: '登录账号',
+                    dataIndex: 'account',
+                    key: 'account',
+                    width: 120,
+                },
+                {
+                    title: '登录密码',
+                    dataIndex: 'password',
+                    key: 'password',
+                    width: 120,
+                    render: (text) => (text ? '***' : '-'),
+                },
+                {
+                    title: '登录URL',
+                    dataIndex: 'loginUrl',
+                    key: 'loginUrl',
+                    width: 200,
+                    render: (text) => {
+                        if (!text) return '-';
+                        const maxLength = 50;
+                        const displayText = text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+                        return React.createElement(antd.Tooltip, {
+                            title: text,
+                            placement: 'topLeft'
+                        }, displayText);
+                    },
+                },
+                {
+                    title: '巡检URL',
+                    dataIndex: 'inspectionUrl',
+                    key: 'inspectionUrl',
+                    width: 200,
+                    render: (text) => {
+                        if (!text) return '-';
+                        const maxLength = 50;
+                        const displayText = text.length > maxLength ? `${text.substring(0, maxLength)}...` : text;
+                        return React.createElement(antd.Tooltip, {
+                            title: text,
+                            placement: 'topLeft'
+                        }, displayText);
+                    },
+                },
+                {
+                    title: '创建时间',
+                    dataIndex: 'gmtCreate',
+                    key: 'gmtCreate',
+                    width: 180,
+                },
+                {
+                    title: '更新时间',
+                    dataIndex: 'gmtModified',
+                    key: 'gmtModified',
+                    width: 180,
+                },
+                {
+                    title: '操作',
+                    key: 'action',
+                    width: 250,
+                    render: (text, record) => (
+                        React.createElement('div', null,
+                            React.createElement(Button, {
+                                type: 'link',
+                                size: 'small',
+                                onClick: () => handleEdit(record)
+                            }, '编辑'),
+                            React.createElement(Button, {
+                                type: 'link',
+                                size: 'small',
+                                onClick: () => handleManage(record),
+                                style: { color: '#52c41a' }
+                            }, '去管理'),
+                            React.createElement(Popconfirm, {
+                                title: '确定要删除这条记录吗？',
+                                onConfirm: () => handleDelete(record),
+                                okText: '确定',
+                                cancelText: '取消'
+                            },
+                                React.createElement(Button, {
+                                    type: 'link',
+                                    size: 'small',
+                                    danger: true
+                                }, '删除')
+                            )
+                        )
+                    ),
+                },
+            ];
+
+            // 标签列表视图
+            const renderTagList = () => (
+                React.createElement('div', { className: 'promptRole' },
+                    React.createElement('div', { className: 'promptRole-header' },
+                        React.createElement('h2', null, 'AI 巡检标签管理')
+                    ),
+                    React.createElement('div', { style: { padding: '24px' } },
+                        React.createElement(Form, { layout: 'inline', style: { marginBottom: '16px' } },
+                            React.createElement(Form.Item, { label: '业务类型' },
+                                React.createElement(Input, {
+                                    placeholder: '请输入业务类型',
+                                    value: queryParams.tag,
+                                    onChange: (e) => setQueryParams({...queryParams, tag: e.target.value}),
+                                    allowClear: true,
+                                    style: { width: 200 }
+                                })
+                            ),
+                            React.createElement(Form.Item, { label: '标签名称' },
+                                React.createElement(Input, {
+                                    placeholder: '请输入标签名称',
+                                    value: queryParams.tagName,
+                                    onChange: (e) => setQueryParams({...queryParams, tagName: e.target.value}),
+                                    allowClear: true,
+                                    style: { width: 200 }
+                                })
+                            ),
+                            React.createElement(Form.Item, { label: '标签描述' },
+                                React.createElement(Input, {
+                                    placeholder: '请输入标签描述',
+                                    value: queryParams.tagDesc,
+                                    onChange: (e) => setQueryParams({...queryParams, tagDesc: e.target.value}),
+                                    allowClear: true,
+                                    style: { width: 200 }
+                                })
+                            ),
+                            React.createElement(Form.Item, null,
+                                React.createElement(Button, {
+                                    type: 'primary',
+                                    onClick: () => queryTableList()
+                                }, '查询')
+                            ),
+                            React.createElement(Form.Item, null,
+                                React.createElement(Button, {
+                                    onClick: () => {
+                                        const resetParams = { tag: '', tagName: '', tagDesc: ''};
+                                        setQueryParams(resetParams);
+                                        setTimeout(() => {
+                                            setTableLoading(true);
+                                            tagApi.queryTagList(resetParams)
+                                                .then(results => {
+                                                    setTableDataList(results || []);
+                                                    setTableLoading(false);
+                                                })
+                                                .catch(error => {
+                                                    console.error('查询失败:', error);
+                                                    message.error(`查询失败: ${error.message}`);
+                                                    setTableLoading(false);
+                                                });
+                                        }, 100);
+                                    }
+                                }, '重置')
+                            )
+                        ),
+                        React.createElement('div', { style: { marginBottom: '16px' } },
+                            React.createElement(Button, {
+                                type: 'primary',
+                                onClick: handleAdd,
+                                style: { marginBottom: '16px' }
+                            }, '新增标签')
+                        ),
+                        React.createElement(Table, {
+                            columns: columns,
+                            dataSource: tableDataList,
+                            rowKey: 'id',
+                            loading: tableLoading,
+                            scroll: { x: 1500 },
+                            pagination: {
+                                showSizeChanger: true,
+                                showQuickJumper: true,
+                                showTotal: (total) => `共 ${total} 条记录`,
+                            }
+                        }),
+                        // 新增/编辑弹窗
+                        React.createElement(Modal, {
+                            title: editMode ? '编辑标签' : '新增标签',
+                            open: modalVisible,
+                            onOk: handleSave,
+                            onCancel: handleCancel,
+                            confirmLoading: modalLoading,
+                            width: 800
+                        },
+                            React.createElement(Form, { layout: 'vertical' },
+                                React.createElement('div', { style: { display: 'flex', gap: '16px' } },
+                                    React.createElement('div', { style: { flex: 1 } },
+                                        React.createElement(Form.Item, { label: '业务类型' },
+                                            React.createElement(Input, {
+                                                value: formData.tag,
+                                                onChange: (e) => setFormData({...formData, tag: e.target.value}),
+                                                placeholder: '请输入业务类型'
+                                            })
+                                        )
+                                    ),
+                                    React.createElement('div', { style: { flex: 1 } },
+                                        React.createElement(Form.Item, { label: '标签名称' },
+                                            React.createElement(Input, {
+                                                value: formData.tagName,
+                                                onChange: (e) => setFormData({...formData, tagName: e.target.value}),
+                                                placeholder: '请输入标签名称'
+                                            })
+                                        )
+                                    )
+                                ),
+                                React.createElement(Form.Item, { label: '标签描述' },
+                                    React.createElement(Input, {
+                                        value: formData.tagDesc,
+                                        onChange: (e) => setFormData({...formData, tagDesc: e.target.value}),
+                                        placeholder: '请输入标签描述'
+                                    })
+                                ),
+                                React.createElement('div', { style: { display: 'flex', gap: '16px' } },
+                                    React.createElement('div', { style: { flex: 1 } },
+                                        React.createElement(Form.Item, { label: '登录账号' },
+                                            React.createElement(Input, {
+                                                value: formData.account,
+                                                onChange: (e) => setFormData({...formData, account: e.target.value}),
+                                                placeholder: '请输入登录账号'
+                                            })
+                                        )
+                                    ),
+                                    React.createElement('div', { style: { flex: 1 } },
+                                        React.createElement(Form.Item, { label: '登录密码' },
+                                            React.createElement(Input.Password, {
+                                                value: formData.password,
+                                                onChange: (e) => setFormData({...formData, password: e.target.value}),
+                                                placeholder: '请输入登录密码'
+                                            })
+                                        )
+                                    )
+                                ),
+                                React.createElement(Form.Item, { label: '登录URL' },
+                                    React.createElement(Input, {
+                                        value: formData.loginUrl,
+                                        onChange: (e) => setFormData({...formData, loginUrl: e.target.value}),
+                                        placeholder: '请输入登录URL'
+                                    })
+                                ),
+                                React.createElement(Form.Item, { label: '巡检URL' },
+                                    React.createElement(Input, {
+                                        value: formData.inspectionUrl,
+                                        onChange: (e) => setFormData({...formData, inspectionUrl: e.target.value}),
+                                        placeholder: '请输入巡检URL'
+                                    })
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+
+            // 管理视图（包含标签页的inspection和prompt）
+            const renderManagementView = () => (
+                React.createElement('div', { className: 'promptRole' },
+                    React.createElement('div', { className: 'promptRole-header', style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+                        React.createElement('h2', null, `${selectedTag.tagName}(${selectedTag.tag}) - 巡检管理`),
+                        React.createElement(Button, {
+                            onClick: handleBackToList,
+                            type: 'default'
+                        }, '返回标签列表')
+                    ),
+                    React.createElement('div', { style: { padding: '24px' } },
+                        React.createElement(Tabs, {
+                            defaultActiveKey: 'inspection',
+                            type: 'card',
+                            size: 'large'
+                        },
+                            React.createElement(TabPane, {
+                                tab: '巡检管理',
+                                key: 'inspection'
+                            },
+                                React.createElement('iframe', {
+                                    src: `./inspection.html?tag=${selectedTag.tag}&tagName=${encodeURIComponent(selectedTag.tagName)}&hideTagSelect=true`,
+                                    width: '100%',
+                                    height: '800px',
+                                    frameBorder: '0',
+                                    style: { border: 'none', borderRadius: '6px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
+                                })
+                            ),
+                            React.createElement(TabPane, {
+                                tab: 'Prompt管理',
+                                key: 'prompt'
+                            },
+                                React.createElement('iframe', {
+                                    src: `./prompt.html?tag=${selectedTag.tag}&tagName=${encodeURIComponent(selectedTag.tagName)}&hideTagSelect=true`,
+                                    width: '100%',
+                                    height: '800px',
+                                    frameBorder: '0',
+                                    style: { border: 'none', borderRadius: '6px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }
+                                })
+                            )
+                        )
+                    )
+                )
+            );
+
+            // 根据当前视图渲染内容
+            if (currentView === 'management' && selectedTag) {
+                return renderManagementView();
+            } else {
+                return renderTagList();
+            }
+        };
+
+        // 渲染应用
+        ReactDOM.render(React.createElement(TagManagement), document.getElementById('root'));
+    </script>
+</body>
+</html>

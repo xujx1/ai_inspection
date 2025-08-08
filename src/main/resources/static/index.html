@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 巡检管理系统</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-container {
+            text-align: center;
+            color: white;
+        }
+        
+        .loading-title {
+            font-size: 2.5em;
+            font-weight: 300;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+        
+        .loading-subtitle {
+            font-size: 1.2em;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 0.5s forwards;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 1s forwards, spin 1s linear infinite 1s;
+        }
+        
+        .loading-text {
+            margin-top: 20px;
+            font-size: 1em;
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out 1.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <h1 class="loading-title">AI 巡检管理系统</h1>
+        <p class="loading-subtitle">智能化巡检，高效管理</p>
+        <div class="loading-spinner"></div>
+        <p class="loading-text">正在加载中...</p>
+    </div>
+
+    <script>
+        // 2秒后自动跳转到标签管理页面
+        setTimeout(function() {
+            window.location.href = './tag.html';
+        }, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态数据</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            color: #1890ff;
+            font-size: 20px;
+            font-weight: 600;
+            margin-right: 32px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #1890ff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .container {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tabs {
+            background: #fff;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            padding: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .tab-item {
+            padding: 16px 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-item.active {
+            color: #1890ff;
+            border-bottom-color: #1890ff;
+            background: rgba(24, 144, 255, 0.02);
+        }
+
+        .tab-content {
+            padding: 24px;
+        }
+
+        .alerts {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-left: 4px solid #ff4d4f;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .alerts h3 {
+            color: #ff4d4f;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .alert-list {
+            list-style: none;
+        }
+
+        .alert-list li {
+            margin-bottom: 8px;
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .alert-list li:before {
+            content: "•";
+            color: #ff4d4f;
+            position: absolute;
+            left: 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            width: 4px;
+            height: 18px;
+            background: #1890ff;
+            border-radius: 2px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .metric-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .metric-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1890ff;
+            margin-bottom: 8px;
+            transition: all 0.5s ease;
+        }
+
+        .metric-trend {
+            font-size: 12px;
+            color: #52c41a;
+            transition: all 0.5s ease;
+        }
+
+        .chart-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2"/><circle cx="50" cy="50" r="30" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><circle cx="50" cy="50" r="20" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/></svg>') center/contain no-repeat;
+        }
+
+        .bar-chart {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .pie-chart {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .line-chart {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        .data-table {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            margin-bottom: 24px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .table th {
+            background: #fafafa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .table tr:hover {
+            background: #fafafa;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+
+        .status-warning {
+            background: #fffbe6;
+            color: #faad14;
+            border: 1px solid #ffe58f;
+        }
+
+        .status-error {
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+        }
+
+        .footer-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .summary-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: #1890ff;
+            font-size: 16px;
+        }
+
+        .refresh-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 56px;
+            height: 56px;
+            background: #1890ff;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(24, 144, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: #40a9ff;
+            transform: scale(1.1);
+        }
+
+        .dynamic-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #52c41a;
+            border-radius: 50%;
+            margin-left: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .data-change {
+            animation: dataUpdate 0.8s ease;
+        }
+
+        @keyframes dataUpdate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); color: #ff4d4f; }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+
+            .chart-section {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">TL 管理者工作台 <span class="dynamic-indicator"></span></div>
+        </div>
+        <div class="header-right">
+            <span>🔔</span>
+            <span>☰</span>
+            <div class="user-avatar">管</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab-nav">
+                <div class="tab-item active">动态数据业务</div>
+                <div style="margin-left: auto; padding: 16px 24px;">
+                    <select style="border: 1px solid #d9d9d9; padding: 4px 8px; border-radius: 4px;">
+                        <option>动态数据业务部</option>
+                    </select>
+                </div>
+            </div>
+            <div class="tab-content">
+                <div class="alerts">
+                    <h3>【重要提醒】</h3>
+                    <ul class="alert-list">
+                        <li>【业务数据】 上月查询高频且单一的地址 <span id="alert-people">600</span> 人，提前0-1天预定国内机票数量占比15%，跨城打车15%：本月业务跨城打车3次</li>
+                        <li>【招聘进展】 当前招聘中流程有<span id="alert-process">600</span>条流程总时长超过28天未完结</li>
+                    </ul>
+                </div>
+
+                <!-- 核心指标 -->
+                <div class="section-title">
+                    <div class="section-icon"></div>
+                    业务增长
+                    <span style="margin-left: auto; font-size: 12px; color: #666;">经营单元</span>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-title">财年业务收入</div>
+                        <div class="metric-value"><span id="annual-revenue">600.15</span><span style="font-size: 16px;">亿</span></div>
+                        <div class="metric-trend">同比: <span id="annual-trend">600.52</span>% ↗</div>
+                        <div style="margin-top: 16px; display: flex; justify-content: space-between;">
+                            <div>
+                                <div style="color: #666; font-size: 12px;">目标值</div>
+                                <div style="font-weight: 600;"><span id="target-value">600</span></div>
+                            </div>
+                            <div>
+                                <div style="color: #666; font-size: 12px;">完成率</div>
+                                <div style="font-weight: 600;"><span id="completion-rate">600</span>%</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">财年新增用户量</div>
+                        <div class="metric-value"><span id="new-users">600,600.30</span><span style="font-size: 16px;">万</span></div>
+                        <div style="margin-top: 8px; color: #666; font-size: 14px;">销售毛利</div>
+                        <div style="color: #1890ff; font-size: 14px;">暂无中心</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">资源保有量</div>
+                        <div style="margin-top: 16px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>Vcpu核数</span>
+                                <span><strong><span id="vcpu-cores">6,600.20</span></strong> 万核</span>
+                                <span style="color: #52c41a;">日环比: <span id="vcpu-trend">0.60</span>% ↗</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                                <span>数据库核数</span>
+                                <span><strong><span id="db-cores">600.09</span></strong> 万核</span>
+                                <span style="color: #52c41a;">日环比: <span id="db-trend">0.16</span>% ↗</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between;">
+                                <span>OSS存储量</span>
+                                <span><strong><span id="oss-storage">600.66</span></strong> EB</span>
+                                <span style="color: #52c41a;">日环比: <span id="oss-trend">0.31</span>% ↗</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- 关键指标卡片 -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-title">公共云MTD月均GAAP</div>
+                        <div class="metric-value"><span id="cloud-gaap">600,600.49</span><span style="font-size: 16px;">万</span></div>
+                        <div class="metric-trend">环比: <span id="cloud-trend">6.60</span>% ↗</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">七大件财务收入</div>
+                        <div class="metric-value"><span id="seven-revenue">6,600,600.21</span><span style="font-size: 16px;">万</span></div>
+                        <div class="metric-trend">同比: <span id="seven-trend">600</span></div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">PPL财年储备</div>
+                        <div class="metric-value"><span id="ppl-reserve">600.62</span><span style="font-size: 16px;">亿</span></div>
+                        <div class="metric-trend">储备率: <span id="ppl-rate">-600.58</span>%</div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-title">代金券财年消耗</div>
+                        <div class="metric-value"><span id="voucher-consume">600,600.29</span><span style="font-size: 16px;">万</span></div>
+                        <div class="metric-trend">代金券发放: <span id="voucher-issue">600,600.77</span>万</div>
+                    </div>
+                </div>
+
+                <!-- 成本投入部分 -->
+                <div class="section-title">
+                    <div class="section-icon"></div>
+                    成本投入
+                    <span style="margin-left: auto; font-size: 12px; color: #666;">实体组织</span>
+                </div>
+
+                <div class="data-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>正式人力成本</th>
+                                <th>生态用工成本</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>正式员工在岗包</strong></td>
+                                <td><span id="formal-cost-1">600</span>万</td>
+                                <td>合规费: <span id="compliance-cost">600.027</span>万</td>
+                            </tr>
+                            <tr>
+                                <td><strong>消耗</strong></td>
+                                <td><span id="formal-cost-2">600</span>万</td>
+                                <td>预计全年消耗占比: <span id="consumption-ratio">600.02</span>%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>降准进度</strong></td>
+                                <td><span id="formal-cost-3">600</span>万</td>
+                                <td>预计全年服务占比: <span id="service-ratio">600</span>万</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 详细数据表格 -->
+                <div class="data-table" style="margin-top: 24px;">
+                    <div class="chart-title">详细业务数据</div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>业务线</th>
+                                <th>收入(万元)</th>
+                                <th>增长率</th>
+                                <th>用户数(万)</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>云计算业务</td>
+                                <td><span id="cloud-revenue">600,000</span></td>
+                                <td>+<span id="cloud-growth">6.00</span>%</td>
+                                <td><span id="cloud-users">600</span></td>
+                                <td><span class="status-badge status-success">优秀</span></td>
+                            </tr>
+                            <tr>
+                                <td>数据库服务</td>
+                                <td><span id="db-revenue">600,000</span></td>
+                                <td>+<span id="db-growth">6.00</span>%</td>
+                                <td><span id="db-users">600</span></td>
+                                <td><span class="status-badge status-success">优秀</span></td>
+                            </tr>
+                            <tr>
+                                <td>存储服务</td>
+                                <td><span id="storage-revenue">600,000</span></td>
+                                <td>+<span id="storage-growth">6.00</span>%</td>
+                                <td><span id="storage-users">600</span></td>
+                                <td><span class="status-badge status-warning">关注</span></td>
+                            </tr>
+                            <tr>
+                                <td>AI服务</td>
+                                <td><span id="ai-revenue">600,000</span></td>
+                                <td>+<span id="ai-growth">6.00</span>%</td>
+                                <td><span id="ai-users">600</span></td>
+                                <td><span class="status-badge status-success">优秀</span></td>
+                            </tr>
+                            <tr>
+                                <td>安全服务</td>
+                                <td><span id="security-revenue">600,000</span></td>
+                                <td>+<span id="security-growth">6.00</span>%</td>
+                                <td><span id="security-users">600</span></td>
+                                <td><span class="status-badge status-error">需改进</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="refresh-btn" onclick="refreshData()">🔄</button>
+
+    <script>
+        // 基础数据配置
+        const baseData = {
+            // 核心指标 - 浮动10%
+            annualRevenue: 600.15,
+            annualTrend: 600.52,
+            targetValue: 600,
+            completionRate: 600,
+            newUsers: 600600.30,
+            vcpuCores: 6600.20,
+            vcpuTrend: 0.60,
+            dbCores: 600.09,
+            dbTrend: 0.16,
+            ossStorage: 600.66,
+            ossTrend: 0.31,
+            
+            // 关键指标卡片 - 浮动10%
+            cloudGaap: 600600.49,
+            cloudTrend: 6.60,
+            sevenRevenue: 6600600.21,
+            sevenTrend: 600,
+            pplReserve: 600.62,
+            pplRate: -600.58,
+            voucherConsume: 600600.29,
+            voucherIssue: 600600.77,
+            
+            // 成本投入 - 浮动10%
+            formalCost: 600,
+            complianceCost: 600.027,
+            consumptionRatio: 600.02,
+            serviceRatio: 600,
+            
+            // 详细业务数据 - 收入浮动10%，用户数浮动200%-400%
+            cloudRevenue: 600000,
+            cloudGrowth: 6.00,
+            cloudUsers: 600,
+            dbRevenue: 600000,
+            dbGrowth: 6.00,
+            dbUsers: 600,
+            storageRevenue: 600000,
+            storageGrowth: 6.00,
+            storageUsers: 600,
+            aiRevenue: 600000,
+            aiGrowth: 6.00,
+            aiUsers: 600,
+            securityRevenue: 600000,
+            securityGrowth: 6.00,
+            securityUsers: 600,
+            
+            // 提醒数据 - 浮动10%
+            alertPeople: 600,
+            alertProcess: 600
+        };
+
+        // 数据浮动函数
+        function fluctuateValue(baseValue, percentage) {
+            const variation = baseValue * (percentage / 100);
+            const randomFactor = (Math.random() - 0.5) * 2; // -1 到 1 之间
+            return baseValue + (variation * randomFactor);
+        }
+
+        // 格式化数字
+        function formatNumber(num, decimals = 2) {
+            if (num >= 10000) {
+                return Math.round(num).toLocaleString();
+            }
+            return num.toFixed(decimals);
+        }
+
+        // 更新数据
+        function updateData() {
+            console.log('🔄 正在更新动态数据...');
+
+            // 添加动画效果的函数
+            function animateUpdate(elementId, newValue) {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.classList.add('data-change');
+                    element.textContent = newValue;
+                    setTimeout(() => {
+                        element.classList.remove('data-change');
+                    }, 800);
+                }
+            }
+
+            // 核心指标更新 (浮动10%)
+            animateUpdate('annual-revenue', formatNumber(fluctuateValue(baseData.annualRevenue, 10), 2));
+            animateUpdate('annual-trend', formatNumber(fluctuateValue(baseData.annualTrend, 10), 2));
+            animateUpdate('target-value', Math.round(fluctuateValue(baseData.targetValue, 10)));
+            animateUpdate('completion-rate', Math.round(fluctuateValue(baseData.completionRate, 10)));
+            animateUpdate('new-users', formatNumber(fluctuateValue(baseData.newUsers, 10), 2));
+            
+            // 资源保有量更新 (浮动10%)
+            animateUpdate('vcpu-cores', formatNumber(fluctuateValue(baseData.vcpuCores, 10), 2));
+            animateUpdate('vcpu-trend', formatNumber(fluctuateValue(baseData.vcpuTrend, 10), 2));
+            animateUpdate('db-cores', formatNumber(fluctuateValue(baseData.dbCores, 10), 2));
+            animateUpdate('db-trend', formatNumber(fluctuateValue(baseData.dbTrend, 10), 2));
+            animateUpdate('oss-storage', formatNumber(fluctuateValue(baseData.ossStorage, 10), 2));
+            animateUpdate('oss-trend', formatNumber(fluctuateValue(baseData.ossTrend, 10), 2));
+            
+            // 关键指标卡片更新 (浮动10%)
+            animateUpdate('cloud-gaap', formatNumber(fluctuateValue(baseData.cloudGaap, 10), 2));
+            animateUpdate('cloud-trend', formatNumber(fluctuateValue(baseData.cloudTrend, 10), 2));
+            animateUpdate('seven-revenue', formatNumber(fluctuateValue(baseData.sevenRevenue, 10), 2));
+            animateUpdate('seven-trend', Math.round(fluctuateValue(baseData.sevenTrend, 10)));
+            animateUpdate('ppl-reserve', formatNumber(fluctuateValue(baseData.pplReserve, 10), 2));
+            animateUpdate('ppl-rate', formatNumber(fluctuateValue(baseData.pplRate, 10), 2));
+            animateUpdate('voucher-consume', formatNumber(fluctuateValue(baseData.voucherConsume, 10), 2));
+            animateUpdate('voucher-issue', formatNumber(fluctuateValue(baseData.voucherIssue, 10), 2));
+            
+            // 成本投入更新 (浮动10%)
+            animateUpdate('formal-cost-1', Math.round(fluctuateValue(baseData.formalCost, 10)));
+            animateUpdate('formal-cost-2', Math.round(fluctuateValue(baseData.formalCost, 10)));
+            animateUpdate('formal-cost-3', Math.round(fluctuateValue(baseData.formalCost, 10)));
+            animateUpdate('compliance-cost', formatNumber(fluctuateValue(baseData.complianceCost, 10), 3));
+            animateUpdate('consumption-ratio', formatNumber(fluctuateValue(baseData.consumptionRatio, 10), 2));
+            animateUpdate('service-ratio', Math.round(fluctuateValue(baseData.serviceRatio, 10)));
+            
+            // 详细业务数据更新 (收入浮动10%，用户数浮动200%-400%)
+            animateUpdate('cloud-revenue', Math.round(fluctuateValue(baseData.cloudRevenue, 10)));
+            animateUpdate('cloud-growth', formatNumber(fluctuateValue(baseData.cloudGrowth, 10), 2));
+            animateUpdate('cloud-users', Math.round(fluctuateValue(baseData.cloudUsers, 300))); // 200%-400%浮动
+            
+            animateUpdate('db-revenue', Math.round(fluctuateValue(baseData.dbRevenue, 10)));
+            animateUpdate('db-growth', formatNumber(fluctuateValue(baseData.dbGrowth, 10), 2));
+            animateUpdate('db-users', Math.round(fluctuateValue(baseData.dbUsers, 300)));
+            
+            animateUpdate('storage-revenue', Math.round(fluctuateValue(baseData.storageRevenue, 10)));
+            animateUpdate('storage-growth', formatNumber(fluctuateValue(baseData.storageGrowth, 10), 2));
+            animateUpdate('storage-users', Math.round(fluctuateValue(baseData.storageUsers, 300)));
+            
+            animateUpdate('ai-revenue', Math.round(fluctuateValue(baseData.aiRevenue, 10)));
+            animateUpdate('ai-growth', formatNumber(fluctuateValue(baseData.aiGrowth, 10), 2));
+            animateUpdate('ai-users', Math.round(fluctuateValue(baseData.aiUsers, 300)));
+            
+            animateUpdate('security-revenue', Math.round(fluctuateValue(baseData.securityRevenue, 10)));
+            animateUpdate('security-growth', formatNumber(fluctuateValue(baseData.securityGrowth, 10), 2));
+            animateUpdate('security-users', Math.round(fluctuateValue(baseData.securityUsers, 300)));
+            
+            // 提醒数据更新 (浮动10%)
+            animateUpdate('alert-people', Math.round(fluctuateValue(baseData.alertPeople, 10)));
+            animateUpdate('alert-process', Math.round(fluctuateValue(baseData.alertProcess, 10)));
+
+            console.log('✅ 动态数据更新完成');
+        }
+
+        // 刷新数据
+        function refreshData() {
+            const btn = document.querySelector('.refresh-btn');
+            btn.style.transform = 'rotate(360deg)';
+            
+            setTimeout(() => {
+                btn.style.transform = 'rotate(0deg)';
+                updateData();
+              
+            }, 1000);
+        }
+
+        // 页面加载时初始化数据
+        window.addEventListener('load', function() {
+            console.log('🚀 动态数据页面已加载');
+            updateData();
+        });
+
+        // 标签页切换
+        document.querySelectorAll('.tab-item').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // 添加交互效果
+        document.querySelectorAll('.metric-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-4px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // 页面可见性变化时暂停/恢复更新
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                console.log('⏸️ 页面隐藏，暂停数据更新');
+            } else {
+                console.log('▶️ 页面显示，恢复数据更新');
+                updateData();
+            }
+        });
+    </script>
+</body>
+</html>

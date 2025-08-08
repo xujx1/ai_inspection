@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户登录 - TL管理者工作台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 背景动画效果 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"><animate attributeName="cy" values="20;80;20" dur="3s" repeatCount="indefinite"/></circle><circle cx="40" cy="40" r="1" fill="rgba(255,255,255,0.15)"><animate attributeName="cy" values="40;10;40" dur="2s" repeatCount="indefinite"/></circle><circle cx="60" cy="60" r="1.5" fill="rgba(255,255,255,0.1)"><animate attributeName="cy" values="60;90;60" dur="4s" repeatCount="indefinite"/></circle><circle cx="80" cy="30" r="1" fill="rgba(255,255,255,0.2)"><animate attributeName="cy" values="30;70;30" dur="2.5s" repeatCount="indefinite"/></circle></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100px); }
+        }
+
+        .login-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 48px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            padding-left: 50px;
+            font-size: 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            outline: none;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-input:focus {
+            border-color: #1890ff;
+            box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 18px;
+            z-index: 1;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #1890ff;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-button:hover {
+            background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(24, 144, 255, 0.3);
+        }
+
+        .login-button:active {
+            transform: translateY(0);
+        }
+
+        .login-button.loading {
+            pointer-events: none;
+            background: #ccc;
+        }
+
+        .login-button .loading-spinner {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+
+        .login-button.loading .loading-spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .login-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .welcome-message {
+            background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .demo-hint {
+            background: rgba(24, 144, 255, 0.1);
+            border: 1px solid rgba(24, 144, 255, 0.2);
+            color: #1890ff;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 32px 24px;
+                margin: 20px;
+            }
+            
+            .login-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1 class="login-title">TL管理者工作台</h1>
+            <p class="login-subtitle">欢迎使用数据管理系统</p>
+        </div>
+
+        <div class="demo-hint">
+            💡 演示模式：可使用任意用户名和密码登录
+        </div>
+
+        <div class="welcome-message" id="welcomeMessage"></div>
+
+        <form class="login-form" id="loginForm">
+            <div class="form-group">
+                <span class="input-icon">👤</span>
+                <input 
+                    type="text" 
+                    class="form-input" 
+                    id="username" 
+                    placeholder="员工账号或邮箱" 
+                    required
+                    autocomplete="username"
+                >
+            </div>
+
+            <div class="form-group">
+                <span class="input-icon">🔒</span>
+                <input 
+                    type="password" 
+                    class="form-input" 
+                    id="password" 
+                    placeholder="请输入密码" 
+                    required
+                    autocomplete="current-password"
+                >
+                <span class="password-toggle" id="passwordToggle">👁️</span>
+            </div>
+
+            <button type="submit" class="login-button" id="loginButton">
+                <span class="loading-spinner"></span>
+                <span class="button-text">登录</span>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <p>© 2024 TL管理者工作台 - 数据管理系统</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM元素
+        const loginForm = document.getElementById('loginForm');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginButton = document.getElementById('loginButton');
+        const buttonText = document.querySelector('.button-text');
+        const passwordToggle = document.getElementById('passwordToggle');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+
+        // 密码显示/隐藏切换
+        passwordToggle.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+
+        // 输入框焦点效果
+        [usernameInput, passwordInput].forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // 模拟登录功能
+        function performLogin(username, password) {
+            return new Promise((resolve) => {
+                // 模拟网络延迟
+                setTimeout(() => {
+                    // 无论输入什么都返回成功
+                    resolve({
+                        success: true,
+                        user: {
+                            username: username || '演示用户',
+                            displayName: username ? `用户 ${username}` : '演示用户',
+                            role: '管理员',
+                            loginTime: new Date().toLocaleString()
+                        }
+                    });
+                }, 1500 + Math.random() * 1000); // 1.5-2.5秒的随机延迟
+            });
+        }
+
+        // 显示欢迎消息
+        function showWelcomeMessage(user) {
+            welcomeMessage.innerHTML = `
+                🎉 欢迎 <strong>${user.displayName}</strong>！正在跳转到工作台...
+            `;
+            welcomeMessage.style.display = 'block';
+        }
+
+        // 跳转到仪表板
+        function redirectToDashboard() {
+            setTimeout(() => {
+                // 添加淡出效果
+                document.body.style.transition = 'opacity 0.5s ease';
+                document.body.style.opacity = '0';
+                
+                setTimeout(() => {
+                    window.location.href = './dashboard_dynamic.html';
+                }, 500);
+            }, 2000);
+        }
+
+        // 表单提交处理
+        loginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = usernameInput.value.trim();
+            const password = passwordInput.value;
+
+            // 基本验证
+            if (!username || !password) {
+                alert('请输入用户名和密码');
+                return;
+            }
+
+            // 显示加载状态
+            loginButton.classList.add('loading');
+            buttonText.textContent = '登录中...';
+            loginButton.disabled = true;
+
+            try {
+                // 执行登录
+                const result = await performLogin(username, password);
+                
+                if (result.success) {
+                    // 隐藏加载状态
+                    loginButton.classList.remove('loading');
+                    buttonText.textContent = '登录成功 ✓';
+                    loginButton.style.background = 'linear-gradient(135deg, #52c41a 0%, #389e0d 100%)';
+                    
+                    // 显示欢迎消息
+                    showWelcomeMessage(result.user);
+                    
+                    // 跳转到仪表板
+                    redirectToDashboard();
+                    
+                    console.log('🎉 登录成功:', result.user);
+                }
+            } catch (error) {
+                // 错误处理（理论上不会发生，因为我们总是返回成功）
+                console.error('登录失败:', error);
+                
+                loginButton.classList.remove('loading');
+                buttonText.textContent = '登录失败，请重试';
+                loginButton.style.background = 'linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%)';
+                loginButton.disabled = false;
+                
+                setTimeout(() => {
+                    buttonText.textContent = '登录';
+                    loginButton.style.background = 'linear-gradient(135deg, #1890ff 0%, #096dd9 100%)';
+                }, 3000);
+            }
+        });
+
+        // 页面加载动画
+        window.addEventListener('load', function() {
+            document.querySelector('.login-container').style.animation = 'slideIn 0.6s ease';
+        });
+
+        // 键盘快捷键 - Enter键登录
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !loginButton.disabled) {
+                loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // 添加一些示例提示
+        const hints = [
+            '可以输入任意用户名密码',
+            '例如：admin / 123456',
+            '例如：user / password',
+            '例如：test / test'
+        ];
+
+        let hintIndex = 0;
+        setInterval(() => {
+            if (!usernameInput.value && !passwordInput.value) {
+                usernameInput.placeholder = hints[hintIndex % hints.length];
+                hintIndex++;
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
